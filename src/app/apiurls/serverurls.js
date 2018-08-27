@@ -1,1 +1,1 @@
-export const apiKey = ''
+export const apiKey = 'https://bophelo-ionic-app-api.herokuapp.com/'
