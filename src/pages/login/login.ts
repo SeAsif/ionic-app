@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, AlertController, NavParams } from 'ionic-angular';
+import { AuthProvider } from '../../providers/auth/auth';
+import { TabsPage } from '../tabs/tabs';
 
 /**
  * Generated class for the LoginPage page.
@@ -15,11 +17,56 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  email:string = '';
+  password:string = '';
+  errorMsg: string;
+  
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public authService: AuthProvider,
+    public alertCtrl: AlertController
+  ) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
+  errorFunc(message){
+    let alert = this.alertCtrl.create({
+      title: 'Warning!',
+      subTitle: message,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+  myLogIn(){
+    if (this.email.trim() !== '') {      
+      console.log(this.email.trim() + "   " + this.password.trim() )  
+      if (this.password.trim()  === '') {
+        this.errorFunc('Please enter your password.')
+      }else{
+        let credentials = {
+          email: this.email,
+            password: this.password
+        };
+        this.authService.login(credentials).then((result) => {
+            console.log(result);
+            this.navCtrl.setRoot(TabsPage); 
+        }, (err) => {
+            console.log(err);
+            this. errorFunc('Invalid credentials! Please try again.')
+            console.log("credentials: "+JSON.stringify(credentials))     
+        });
+      }
+   }
+   else{
+    this. errorFunc('Please enter a vaild password!')
+    }
+  }
+
+  myLogOut(){
+    this.authService.logout();
+  }
 }
