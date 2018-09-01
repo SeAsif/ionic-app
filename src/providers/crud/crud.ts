@@ -1,6 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import {apiKey} from "../../app/apiurls/serverurls.js";
+import { Http , Headers } from '@angular/http';
+import 'rxjs/add/operator/map';
+import { Storage } from '@ionic/storage';
+
 /*
   Generated class for the CrudProvider provider.
 
@@ -10,8 +15,89 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class CrudProvider {
 
-  constructor(public http: HttpClient) {
+  constructor(public storage: Storage, public http: Http) {
     console.log('Hello CrudProvider Provider');
   }
 
+  getBooks(){
+    return new Promise((resolve, reject) => {
+     this.storage.get('token').then((value) => {
+
+       let headers = new Headers();
+       headers.append('Content-Type', 'application/json');
+       headers.append('Authorization', 'Bearer '+value);
+
+       console.log('value: ' + value);
+  
+       this.http.get(apiKey+'api/books', {headers: headers})
+         .map(res => res.json())
+         .subscribe(data => {
+           resolve(data);
+         }, (err) => {
+           reject(err);
+         }); 
+     }) 
+   });
+  }
+  
+  insertBooks(bookInfo){
+      return new Promise((resolve, reject) => {
+      this.storage.get('token').then((value) => {
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Bearer '+value);
+        console.log('value: ' + value);
+
+        this.http.post(apiKey+'api/books',  JSON.stringify(bookInfo),  {headers: headers})
+          .map(res => res.json())
+          .subscribe(data => {
+            resolve(data);
+          }, (err) => {
+            reject(err);
+          }); 
+      }) 
+    });
+  }
+
+  editBooks(id,bookInfo){
+      return new Promise((resolve, reject) => {
+      this.storage.get('token').then((value) => {
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Bearer '+value);
+        console.log('value: ' + value);
+
+        this.http.put(apiKey+'api/books/' +id ,  JSON.stringify(bookInfo),  {headers: headers})
+          .map(res => res.json())
+          .subscribe(data => {
+            resolve(data);
+          }, (err) => {
+            reject(err);
+          }); 
+      }) 
+    });
+  }
+
+  deleteBooks(id ){
+      return new Promise((resolve, reject) => {
+      this.storage.get('token').then((value) => {
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Bearer '+value);
+        console.log('value: ' + value);
+
+        this.http.delete(apiKey+'api/books/' +id,    {headers: headers})
+          .map(res => res.json())
+          .subscribe(data => {
+            resolve(data);
+          }, (err) => {
+            reject(err);
+          }); 
+      }) 
+    });
+  }
+  
 }

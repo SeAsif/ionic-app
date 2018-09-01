@@ -16,6 +16,8 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
+import { CreatePage } from '../pages/create/create';
+import { EditPage } from '../pages/edit/edit';
 
 import { HttpModule } from '@angular/http';
 
@@ -27,7 +29,9 @@ import { HttpModule } from '@angular/http';
     HomePage,
     TabsPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    CreatePage,
+    EditPage
   ],
   imports: [
     BrowserModule,
@@ -43,7 +47,9 @@ import { HttpModule } from '@angular/http';
     HomePage,
     TabsPage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    CreatePage,
+    EditPage
   ],
   providers: [
     StatusBar,
